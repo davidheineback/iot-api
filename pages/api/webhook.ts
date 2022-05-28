@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import Pusher from 'pusher'
 
 type Data = {
   name: string
@@ -14,7 +15,17 @@ export default function handler(
     const { authorization } = req.headers
 
     if (authorized(deviceToken, signal, authorization)) {
-      console.log(payload)
+      const pusher = new Pusher({
+        appId: process.env.PUSHER_APP_ID!,
+        key: process.env.PUSHER_KEY!,
+        secret: process.env.PUSHER_SECRET!,
+        cluster: 'eu',
+        useTLS: true,
+      })
+
+      pusher.trigger('esp32', 'capture', {
+        message: 'capture',
+      })
       res.status(200).json({ name: 'Webhook' })
     } else {
       console.log('Unauthorized')
