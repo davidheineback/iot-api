@@ -11,22 +11,47 @@ export default function handler(
 ) {
   try {
     const { deviceToken, signal, payload } = req.body
-    console.log(deviceToken === process.env.DEVICE_TOKEN)
-    console.log(signal === process.env.DEVICE_SIGNAL)
+    const { authorization } = req.headers
 
-    if (
-      deviceToken === process.env.DEVICE_TOKEN &&
-      signal.toString() === process.env.DEVICE_SIGNAL
-    ) {
+    if (authorized(deviceToken, signal, authorization)) {
       console.log(payload)
       res.status(200).json({ name: 'Webhook' })
     } else {
       console.log('Bad request')
-      res.status(400).json({ name: 'Bad request' })
+      res.status(401).json({ name: 'Unauthorized' })
     }
   } catch (error: any) {
     if (error.code === 'ENOTFOUND') {
       console.log(404, 'Not Found')
     }
   }
+}
+
+function authorized(deviceToken: string, signal: string, authorization: any) {
+  if (!authorization) {
+    return false
+  }
+
+  const authHeaderSplitArray = Buffer.from(
+    authorization.split(' ')[1],
+    'base64'
+  )
+    .toString()
+    .split(':')
+
+  const username = authHeaderSplitArray[0]
+  const password = authHeaderSplitArray[1]
+
+  console.log(username)
+  console.log(password)
+
+  if (
+    username !== process.env.WEBHOOK_USERNAME ||
+    password !== process.env.WEBHOOK_PASSWORD ||
+    deviceToken !== process.env.DEVICE_TOKEN ||
+    signal !== process.env.DEVICE_SIGNAL
+  ) {
+    return false
+  }
+  return true
 }
