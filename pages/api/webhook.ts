@@ -20,9 +20,10 @@ export default function handler(
     ) {
       console.log(payload)
       res.status(200).json({ name: 'Webhook' })
+    } else {
+      console.log('Bad request')
+      res.status(400).json({ name: 'Bad request' })
     }
-
-    res.status(400).json({ name: 'Bad request' })
   } catch (error: any) {
     if (error.code === 'ENOTFOUND') {
       console.log(404, 'Not Found')
