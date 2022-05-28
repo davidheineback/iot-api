@@ -11,6 +11,8 @@ export default function handler(
 ) {
   try {
     const { deviceToken, signal, payload } = req.body
+    console.log(deviceToken === process.env.DEVICE_TOKEN)
+    console.log(signal === process.env.SIGNAL)
 
     if (
       deviceToken === process.env.DEVICE_TOKEN &&
