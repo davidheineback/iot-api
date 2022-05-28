@@ -12,11 +12,11 @@ export default function handler(
   try {
     const { deviceToken, signal, payload } = req.body
     console.log(deviceToken === process.env.DEVICE_TOKEN)
-    console.log(signal.toString() === process.env.SIGNAL)
+    console.log(signal === process.env.DEVICE_SIGNAL)
 
     if (
       deviceToken === process.env.DEVICE_TOKEN &&
-      signal.toString() === process.env.SIGNAL
+      signal.toString() === process.env.DEVICE_SIGNAL
     ) {
       console.log(payload)
       res.status(200).json({ name: 'Webhook' })
