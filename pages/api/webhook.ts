@@ -17,7 +17,7 @@ export default function handler(
       console.log(payload)
       res.status(200).json({ name: 'Webhook' })
     } else {
-      console.log('Bad request')
+      console.log('Unauthorized')
       res.status(401).json({ name: 'Unauthorized' })
     }
   } catch (error: any) {
