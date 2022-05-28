@@ -42,9 +42,6 @@ function authorized(deviceToken: string, signal: string, authorization: any) {
   const username = authHeaderSplitArray[0]
   const password = authHeaderSplitArray[1]
 
-  console.log(username)
-  console.log(password)
-
   if (
     username !== process.env.WEBHOOK_USERNAME ||
     password !== process.env.WEBHOOK_PASSWORD ||
