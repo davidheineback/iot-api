@@ -23,7 +23,7 @@ export default function handler(
     })
 
     if (authorized(deviceToken, signal, authorization)) {
-      pusher.trigger('esp32', 'capture', {
+      pusher.trigger('my-channel', 'my-event', {
         message: 'capture',
       })
       res.status(200).json({ name: 'Webhook' })
