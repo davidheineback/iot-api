@@ -14,15 +14,15 @@ export default function handler(
     const { deviceToken, signal, payload } = req.body
     const { authorization } = req.headers
 
-    if (authorized(deviceToken, signal, authorization)) {
-      const pusher = new Pusher({
-        appId: process.env.PUSHER_APP_ID!,
-        key: process.env.PUSHER_KEY!,
-        secret: process.env.PUSHER_SECRET!,
-        cluster: 'eu',
-        useTLS: true,
-      })
+    const pusher = new Pusher({
+      appId: process.env.PUSHER_APP_ID!,
+      key: process.env.PUSHER_KEY!,
+      secret: process.env.PUSHER_SECRET!,
+      cluster: 'eu',
+      useTLS: true,
+    })
 
+    if (authorized(deviceToken, signal, authorization)) {
       pusher.trigger('esp32', 'capture', {
         message: 'capture',
       })
