@@ -10,11 +10,17 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   try {
-    console.log(req.body)
-
     const { deviceToken, signal, payload } = req.body
 
-    res.status(200).json({ name: 'Webhook' })
+    if (
+      deviceToken === process.env.DEVICE_TOKEN &&
+      signal === process.env.SIGNAL
+    ) {
+      console.log(payload)
+      res.status(200).json({ name: 'Webhook' })
+    }
+
+    res.status(400).json({ name: 'Bad request' })
   } catch (error: any) {
     if (error.code === 'ENOTFOUND') {
       console.log(404, 'Not Found')
